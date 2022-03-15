@@ -1,7 +1,11 @@
 defmodule Letter do
+  alias Letter.Utils
   @moduledoc """
   Documentação para o módulo `Letter`.
   """
+  @wrong 0
+  @correct 1
+  @wrong_position 2
 
   def compare(input, palavra) do
     compare(input,palavra,[],palavra)
@@ -13,29 +17,16 @@ defmodule Letter do
   end
 
   defp compare([a | b], [c | d] , saida, palavra) when a == c do
-      compare(b, d, saida ++ [1], palavra)
+      compare(b, d, saida ++ [@correct], palavra)
   end
 
   defp compare([a | b], [c | d] , saida , palavra) when a != c do
-      case exists?(a,palavra) do
+      case Utils.exists?(a,palavra) do
         true ->
-          compare(b, d, saida ++ [0], palavra)
+          compare(b, d, saida ++ [@wrong], palavra)
         false ->
-          compare(b, d, saida ++ [2], palavra)
+          compare(b, d, saida ++ [@wrong_position], palavra)
       end
-  end
-
-  defp exists?(_, []) do
-    false
-  end
-
-  defp exists?(elemento,[a | b]) do
-    case [elemento] == a do
-      true ->
-        true
-      false ->
-        exists?(elemento,b)
-    end
   end
 
 end
